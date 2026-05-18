@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import AppRoutes from './routes/AppROutes';
+import AppRoutes from './routes/AppRoutes';
 import { fetchProfile } from './features/profile/profileSlice';
 
 function App() {
