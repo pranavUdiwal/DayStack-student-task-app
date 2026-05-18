@@ -8,7 +8,7 @@ const profileRouter = require('./routes/profile.route');
 const app = express();
 
 app.use(cors({
-  origin: process.env.CLIENT_URL ? [process.env.CLIENT_URL, 'http://localhost:5173'] : ['http://localhost:5173'],
+  origin: (origin, callback) => callback(null, true),
   credentials: true
 }));
 
