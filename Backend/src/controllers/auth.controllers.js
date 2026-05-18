@@ -75,14 +75,11 @@ const emailVerification = async (req, res) => {
 
         const otp = Math.floor(100000 + Math.random() * 900000);
 
-        sendMailTo(userEmail, 'Email Verification', `<h1>Your OTP for email verification is ${otp}</h1>`);
+        await sendMailTo(userEmail, 'Email Verification', `<h1>Your OTP for email verification is ${otp}</h1>`);
 
-        console.log(`\n=== 🔐 HACKATHON/DEV OTP: ${otp} (for ${userEmail}) ===\n`);
+        res.status(200).json({ message: 'Verification email sent successfully' });
 
-        res.status(200).json({
-            message: 'Verification process started',
-            devOtp: otp
-        });
+        return otp;
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
         console.log(error.message);
@@ -105,19 +102,13 @@ const forgotPassword = async (req, res) => {
 
         const otp = Math.floor(100000 + Math.random() * 900000);
 
-        // Run asynchronously without awaiting to prevent hanging on Render's SMTP block
-        sendMailTo(userEmail, 'Email Verification for Password Reset', `<h1>Your OTP for password reset is ${otp}</h1>`);
-
-        console.log(`\n=== 🔐 HACKATHON/DEV RESET OTP: ${otp} (for ${userEmail}) ===\n`);
+        await sendMailTo(userEmail, 'Email Verification for Password Reset', `<h1>Your OTP for password reset is ${otp}</h1>`);
 
         user.resetOtp = otp;
         user.resetOtpExpiry = Date.now() + 10 * 60 * 1000;
         await user.save();
 
-        return res.status(200).json({ 
-            message: 'OTP process started',
-            devOtp: otp // Included for hackathon demo purposes since Render free tier blocks emails
-        });
+        return res.status(200).json({ message: 'OTP sent to email successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
         console.log(error.message);

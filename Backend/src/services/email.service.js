@@ -1,33 +1,34 @@
-const nodemailer = require('nodemailer');
-const dns = require('dns');
-
-dns.setDefaultResultOrder('ipv4first');
-
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    family: 4,
-    auth: {
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASSWORD
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-});
-
 const sendMailTo = async (to, subject, html) => {
     try {
-        const mailOptions = {
-            from: 'Student Task System <' + process.env.EMAIL + '>',
-            to,
-            subject,
-            html
-        };
-        return await transporter.sendMail(mailOptions);
+        const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': process.env.BREVO_API_KEY,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender: {  
+                    name: 'DayStack Platform',
+                    email: process.env.EMAIL
+                },
+                to: [{ email: to }],
+                subject: subject,
+                htmlContent: html
+            })
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            console.error('Brevo API Error:', data);
+            return null;
+        }
+
+        console.log('Email sent successfully via Brevo HTTP API:', data);
+        return data;
     } catch (error) {
-        console.error(error);
+        console.error('Email sending failed:', error);
         return null;
     }
 };
