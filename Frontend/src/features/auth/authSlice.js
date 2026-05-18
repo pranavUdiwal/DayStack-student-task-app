@@ -120,7 +120,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.isSuccess = true;
         
-        const retrievedToken = getStoredToken();
+        const retrievedToken = action.payload.token || getStoredToken();
         
         state.token = retrievedToken;
         state.user = action.payload.user || (retrievedToken ? { email: 'student@example.com' } : null);
