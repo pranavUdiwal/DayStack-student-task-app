@@ -75,7 +75,7 @@ const emailVerification = async (req, res) => {
 
         const otp = Math.floor(100000 + Math.random() * 900000);
 
-        sendMailTo(userEmail, 'Email Verification', `<h1>Your OTP for email verification is ${otp}</h1>`);
+        await sendMailTo(userEmail, 'Email Verification', `<h1>Your OTP for email verification is ${otp}</h1>`);
 
         res.status(200).json({ message: 'Verification email sent successfully' });
 
@@ -102,7 +102,7 @@ const forgotPassword = async (req, res) => {
 
         const otp = Math.floor(100000 + Math.random() * 900000);
 
-        sendMailTo(userEmail, 'Email Verification for Password Reset', `<h1>Your OTP for email verification is ${otp}</h1>`);
+        await sendMailTo(userEmail, 'Email Verification for Password Reset', `<h1>Your OTP for email verification is ${otp}</h1>`);
 
         user.resetOtp = otp;
         user.resetOtpExpiry = Date.now() + 10 * 60 * 1000;

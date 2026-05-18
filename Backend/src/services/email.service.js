@@ -5,8 +5,8 @@ dns.setDefaultResultOrder('ipv4first');
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false,
     family: 4,
     auth: {
         user: process.env.EMAIL,
@@ -18,14 +18,18 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendMailTo = async (to, subject, html) => {
-    const mailOptions = {
-        from:'Student Task System <' + process.env.EMAIL + '>',
-        to,
-        subject,
-        html
+    try {
+        const mailOptions = {
+            from: 'Student Task System <' + process.env.EMAIL + '>',
+            to,
+            subject,
+            html
+        };
+        return await transporter.sendMail(mailOptions);
+    } catch (error) {
+        console.error(error);
+        return null;
     }
-
-    return await transporter.sendMail(mailOptions)
-}
+};
 
 module.exports = sendMailTo;
