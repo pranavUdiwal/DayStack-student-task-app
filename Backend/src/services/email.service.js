@@ -1,34 +1,25 @@
+const formData = require('form-data');
+const Mailgun = require('mailgun.js');
+
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({
+    username: 'api',
+    key: process.env.MAILGUN_API_KEY || 'dummy_key'
+});
+
 const sendMailTo = async (to, subject, html) => {
     try {
-        const response = await fetch('https://api.brevo.com/v3/smtp/email', {
-            method: 'POST',
-            headers: {
-                'accept': 'application/json',
-                'api-key': process.env.BREVO_API_KEY,
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                sender: {  
-                    name: 'DayStack Platform',
-                    email: process.env.EMAIL
-                },
-                to: [{ email: to }],
-                subject: subject,
-                htmlContent: html
-            })
+        const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, {
+            from: `DayStack Platform <noreply@${process.env.MAILGUN_DOMAIN}>`,
+            to: [to],
+            subject: subject,
+            html: html
         });
-
-        const data = await response.json();
         
-        if (!response.ok) {
-            console.error('Brevo API Error:', data);
-            return null;
-        }
-
-        console.log('Email sent successfully via Brevo HTTP API:', data);
-        return data;
+        console.log('Email sent successfully via Mailgun:', response);
+        return response;
     } catch (error) {
-        console.error('Email sending failed:', error);
+        console.error('Email sending failed via Mailgun:', error);
         return null;
     }
 };
