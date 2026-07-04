@@ -11,11 +11,15 @@ passport.use(
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
       callbackURL: '/api/auth/google/callback',
       passReqToCallback: true,
+      proxy: true,
     },
     async (req, accessToken, refreshToken, profile, done) => {
       try {
+        if (!profile.emails || profile.emails.length === 0) {
+          return done(new Error('No email found from Google account'), null);
+        }
         const email = profile.emails[0].value;
-        const name = profile.displayName;
+        const name = profile.displayName || 'Google User';
 
         let user = await User.findOne({ email });
 
