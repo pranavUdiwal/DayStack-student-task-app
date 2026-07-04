@@ -139,9 +139,17 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = true;
+
+        const retrievedToken = action.payload.token || getStoredToken();
+        state.token = retrievedToken;
+        state.user = action.payload.user || (retrievedToken ? { email: 'registered@example.com' } : null);
+
+        if (retrievedToken) {
+          localStorage.setItem('token', retrievedToken);
+        }
         toast.success('Registration successful!');
       })
       .addCase(registerUser.rejected, (state, action) => {

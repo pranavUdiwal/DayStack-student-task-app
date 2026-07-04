@@ -18,7 +18,7 @@ export default function RegisterForm() {
     e.preventDefault();
     const resultAction = await dispatch(registerUser(formData));
     if (registerUser.fulfilled.match(resultAction)) {
-      navigate('/verify-email', { state: { email: formData.email } });
+      navigate('/dashboard');
     }
   };
 
@@ -80,7 +80,7 @@ export default function RegisterForm() {
         disabled={loading}
         className="w-full bg-slate-900 dark:bg-emerald-600 text-white font-medium py-2.5 rounded-lg hover:bg-slate-800 dark:hover:bg-emerald-700 transition-all duration-200 flex justify-center items-center mt-2 cursor-pointer"
       >
-        {loading ? <Loader fullScreen={false} /> : 'Create Account'}
+        {loading ? <Loader inline /> : 'Create Account'}
       </button>
     </form>
   );

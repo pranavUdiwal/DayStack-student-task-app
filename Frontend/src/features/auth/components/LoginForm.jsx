@@ -19,6 +19,11 @@ export default function LoginForm({ onForgotPassword }) {
     const resultAction = await dispatch(loginUser(formData));
     if (loginUser.fulfilled.match(resultAction)) {
       navigate('/dashboard');
+    } else if (loginUser.rejected.match(resultAction)) {
+      const msg = resultAction.payload || '';
+      if (msg.toLowerCase().includes('not found')) {
+        navigate('/register');
+      }
     }
   };
 
@@ -65,7 +70,7 @@ export default function LoginForm({ onForgotPassword }) {
         disabled={loading}
         className="w-full bg-slate-900 dark:bg-emerald-600 text-white font-medium py-2.5 rounded-lg hover:bg-slate-800 dark:hover:bg-emerald-700 transition-all duration-200 flex justify-center items-center mt-2 cursor-pointer"
       >
-        {loading ? <Loader fullScreen={false} /> : 'Sign In'}
+        {loading ? <Loader inline /> : 'Sign In'}
       </button>
     </form>
   );

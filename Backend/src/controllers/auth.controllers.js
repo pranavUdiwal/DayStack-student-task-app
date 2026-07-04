@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
-const sendMailTo = require('../services/email.service');
+const emailService = require('../services/email.service');
 
 const registerController = async (req, res) => {
     try {
@@ -27,7 +27,11 @@ const registerController = async (req, res) => {
             password: hashedPassword
         });
 
-        res.cookie('token', token, { secure: true, sameSite: 'none' });
+        res.cookie('token', token, { 
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' 
+        });
 
         res.status(201).json({ message: 'User registered successfully', token });
     } catch (error) {
@@ -57,7 +61,11 @@ const loginController = async (req, res) => {
         }
 
         const token = await user.generateJWT();
-        res.cookie('token', token, { secure: true, sameSite: 'none' });
+        res.cookie('token', token, { 
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' 
+        });
         res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
@@ -75,7 +83,7 @@ const emailVerification = async (req, res) => {
 
         const otp = Math.floor(100000 + Math.random() * 900000);
 
-        await sendMailTo(userEmail, 'Email Verification', `<h1>Your OTP for email verification is ${otp}</h1>`);
+        await emailService.sendEmail(userEmail, 'Email Verification', `<h1>Your OTP for email verification is ${otp}</h1>`);
 
         res.status(200).json({ message: 'Verification email sent successfully' });
 
@@ -102,7 +110,7 @@ const forgotPassword = async (req, res) => {
 
         const otp = Math.floor(100000 + Math.random() * 900000);
 
-        await sendMailTo(userEmail, 'Email Verification for Password Reset', `<h1>Your OTP for password reset is ${otp}</h1>`);
+        await emailService.sendEmail(userEmail, 'Email Verification for Password Reset', `<h1>Your OTP for password reset is ${otp}</h1>`);
 
         user.resetOtp = otp;
         user.resetOtpExpiry = Date.now() + 10 * 60 * 1000;
