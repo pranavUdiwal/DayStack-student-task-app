@@ -15,6 +15,9 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+const passport = require('./config/passport');
+app.use(passport.initialize());
+
 app.use('/api/auth', userRouter);
 app.use('/api/journals', journalRouter);
 app.use('/api/dashboard', dashboardRouter);

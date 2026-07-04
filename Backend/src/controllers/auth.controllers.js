@@ -83,7 +83,7 @@ const emailVerification = async (req, res) => {
 
         const otp = Math.floor(100000 + Math.random() * 900000);
 
-        await emailService.sendEmail(userEmail, 'Email Verification', `<h1>Your OTP for email verification is ${otp}</h1>`);
+        await emailService.sendEmail(userEmail, 'Email Verification', `<h1>Your OTP for email verification is ${otp}</h1><p>This is your code for the DayStack Student app registration.</p>`);
 
         res.status(200).json({ message: 'Verification email sent successfully' });
 

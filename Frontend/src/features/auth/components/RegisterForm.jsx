@@ -18,7 +18,7 @@ export default function RegisterForm() {
     e.preventDefault();
     const resultAction = await dispatch(registerUser(formData));
     if (registerUser.fulfilled.match(resultAction)) {
-      navigate('/dashboard');
+      navigate('/verify-email', { state: { email: formData.email } });
     }
   };
 

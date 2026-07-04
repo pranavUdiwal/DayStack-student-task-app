@@ -81,7 +81,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
                   disabled={loading || !email}
                   className="w-full bg-slate-900 dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition-all shadow-md disabled:opacity-50 cursor-pointer flex justify-center items-center h-11 mt-2"
                 >
-                  {loading ? <Loader fullScreen={false} /> : 'Send Reset Code'}
+                  {loading ? <Loader inline /> : 'Send Reset Code'}
                 </button>
               </form>
             </div>
@@ -112,7 +112,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
                   disabled={loading || otp.length < 6}
                   className="w-full bg-slate-900 dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition-all shadow-md disabled:opacity-50 cursor-pointer flex justify-center items-center h-11 mt-2"
                 >
-                  {loading ? <Loader fullScreen={false} /> : 'Verify Code'}
+                  {loading ? <Loader inline /> : 'Verify Code'}
                 </button>
               </form>
             </div>
@@ -142,7 +142,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
                   disabled={loading || !newPassword}
                   className="w-full bg-slate-900 dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition-all shadow-md disabled:opacity-50 cursor-pointer flex justify-center items-center h-11 mt-2"
                 >
-                  {loading ? <Loader fullScreen={false} /> : 'Save New Password'}
+                  {loading ? <Loader inline /> : 'Save New Password'}
                 </button>
               </form>
             </div>

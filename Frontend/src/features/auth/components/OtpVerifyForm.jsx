@@ -66,7 +66,7 @@ export default function OtpVerifyForm({ email }) {
         disabled={loading || otp.join('').length < 6}
         className="w-full bg-slate-900 dark:bg-emerald-600 text-white font-medium py-2.5 rounded-lg hover:bg-slate-800 dark:hover:bg-emerald-700 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 flex justify-center items-center cursor-pointer"
       >
-        {loading ? <Loader fullScreen={false} /> : 'Verify Account'}
+        {loading ? <Loader inline /> : 'Verify Account'}
       </button>
     </form>
   );

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import OtpVerifyForm from '../components/OtpVerifyForm';
 import { resetAuthState, sendOtp } from '../authSlice';
 import { ShieldCheck, RefreshCw } from 'lucide-react';
+import { useRef } from 'react';
 
 export default function OtpPage() {
   const { token, loading } = useSelector((state) => state.auth);
@@ -12,17 +13,21 @@ export default function OtpPage() {
   const location = useLocation();
   const email = location.state?.email;
 
+  const hasSentRef = useRef(false);
+
   useEffect(() => {
     dispatch(resetAuthState());
     if (token) {
       navigate('/dashboard');
-      return;
     }
+  }, [token, navigate, dispatch]);
 
-    if (email) {
+  useEffect(() => {
+    if (email && !hasSentRef.current) {
       dispatch(sendOtp(email));
+      hasSentRef.current = true;
     }
-  }, [token, navigate, dispatch, email]);
+  }, [email, dispatch]);
 
   const handleResend = () => {
     if (email) {

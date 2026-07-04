@@ -5,6 +5,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import LoginPage from '../features/auth/pages/LoginPage';
 import RegisterPage from '../features/auth/pages/RegisterPage';
 import OtpPage from '../features/auth/pages/OtpPage';
+import GoogleAuthSuccess from '../features/auth/pages/GoogleAuthSuccess';
 
 import DashboardPage from '../features/dashboard/pages/DashboardPage';
 
@@ -23,6 +24,7 @@ export default function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/verify-email" element={<OtpPage />} />
+      <Route path="/auth/google/success" element={<GoogleAuthSuccess />} />
       
       <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
       

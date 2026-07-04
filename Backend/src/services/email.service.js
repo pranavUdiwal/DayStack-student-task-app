@@ -17,7 +17,7 @@ class EmailService {
   async sendEmail(to, subject, htmlContent) {
     try {
       const mailOptions = {
-        from: `Your App Name <${process.env.OAUTH_EMAIL}>`,
+        from: `"DayStack App" <${process.env.OAUTH_EMAIL}>`,
         to: to,
         subject: subject,
         html: htmlContent,
