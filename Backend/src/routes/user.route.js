@@ -13,7 +13,7 @@ router.post('/reset-password', resetPassword);
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get(
   '/google/callback',
-  passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+  passport.authenticate('google', { session: false, failureRedirect: process.env.FRONTEND_URL ? `${process.env.FRONTEND_URL}/login` : '/login' }),
   (req, res) => {
     const token = req.user.generateJWT();
     
