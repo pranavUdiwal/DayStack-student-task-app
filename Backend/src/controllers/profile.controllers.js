@@ -14,10 +14,11 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     try {
-        const { name, bio } = req.body;
+        const { name, bio, profilePhoto } = req.body;
         
         if (name) req.user.name = name;
         if (bio !== undefined) req.user.bio = bio;
+        if (profilePhoto !== undefined) req.user.profilePhoto = profilePhoto;
         
         await req.user.save();
         

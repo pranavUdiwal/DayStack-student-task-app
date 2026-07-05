@@ -82,6 +82,12 @@ export default function TimerPage() {
   };
 
   const handleTimerComplete = () => {
+    const secondsElapsed = presetMinutes * 60 - secondsRemaining;
+    if (secondsElapsed === 0) {
+      toast.info("Timer hasn't started yet! Run the timer for a while before logging a session.");
+      return;
+    }
+
     if (!isMuted) {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -134,17 +140,17 @@ export default function TimerPage() {
   const progressPercent = ((presetMinutes * 60 - secondsRemaining) / (presetMinutes * 60)) * 100;
 
   return (
-    <div className="min-h-screen bg-slate-900 dark:bg-slate-950 text-white flex flex-col font-sans relative overflow-hidden transition-all duration-700">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-950/40 via-slate-950 to-slate-950 z-0"></div>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col font-sans relative overflow-hidden transition-all duration-700">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-100 via-slate-50 to-slate-50 dark:from-emerald-950/40 dark:via-slate-950 dark:to-slate-950 z-0"></div>
       
-      <div className={`absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-800/10 rounded-full blur-3xl pointer-events-none transition-transform duration-1000 ${isActive ? 'scale-125 animate-pulse' : 'scale-100'}`}></div>
-      <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-900/10 rounded-full blur-3xl pointer-events-none transition-transform duration-1000 ${isActive ? 'scale-125 animate-pulse' : 'scale-100'}`}></div>
+      <div className={`absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-200/50 dark:bg-emerald-800/10 rounded-full blur-3xl pointer-events-none transition-transform duration-1000 ${isActive ? 'scale-125 animate-pulse' : 'scale-100'}`}></div>
+      <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-200/50 dark:bg-indigo-900/10 rounded-full blur-3xl pointer-events-none transition-transform duration-1000 ${isActive ? 'scale-125 animate-pulse' : 'scale-100'}`}></div>
 
       <div className="relative z-10 flex flex-col min-h-screen">
         <Navbar />
 
         <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 flex flex-col items-center justify-center gap-10">
-          <div className="flex justify-between items-center w-full max-w-lg bg-white/5 backdrop-blur-md px-6 py-3.5 rounded-2xl border border-white/10 shadow-lg gap-4">
+          <div className="flex justify-between items-center w-full max-w-lg bg-white/80 dark:bg-white/5 backdrop-blur-md px-6 py-3.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-lg gap-4">
             <div className="flex gap-2 items-center flex-wrap">
               {[15, 25, 50, 90].map((mins) => (
                 <button
@@ -153,14 +159,14 @@ export default function TimerPage() {
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     presetMinutes === mins && !customInput
                       ? 'bg-emerald-600 text-white shadow-sm'
-                      : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {mins} Min
                 </button>
               ))}
 
-              <div className="flex items-center gap-1 pl-2 ml-1 border-l border-white/20">
+              <div className="flex items-center gap-1 pl-2 ml-1 border-l border-slate-200 dark:border-white/20">
                 <input
                   type="number"
                   min="1"
@@ -169,15 +175,15 @@ export default function TimerPage() {
                   onChange={handleCustomChange}
                   placeholder="Custom"
                   title="Custom minutes"
-                  className={`w-18 bg-white/10 border rounded-xl px-2.5 py-1.5 text-xs text-center text-white focus:outline-none transition-all placeholder:text-slate-400 ${customInput ? 'border-emerald-500 bg-emerald-950/30 font-bold' : 'border-white/20'}`}
+                  className={`w-18 bg-slate-50 dark:bg-white/10 border rounded-xl px-2.5 py-1.5 text-xs text-center text-slate-900 dark:text-white focus:outline-none transition-all placeholder:text-slate-400 ${customInput ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 font-bold' : 'border-slate-300 dark:border-white/20'}`}
                 />
-                <span className="text-xs text-slate-400 font-bold">m</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-bold">m</span>
               </div>
             </div>
 
             <button
               onClick={() => setIsMuted(!isMuted)}
-              className="text-slate-300 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/5 shrink-0"
+              className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 shrink-0"
               title={isMuted ? 'Unmute alerts' : 'Mute alerts'}
             >
               {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5 animate-bounce" />}
@@ -190,7 +196,7 @@ export default function TimerPage() {
                 cx="160"
                 cy="160"
                 r="135"
-                className="stroke-slate-800"
+                className="stroke-slate-200 dark:stroke-slate-800"
                 strokeWidth="6"
                 fill="transparent"
               />
@@ -208,10 +214,10 @@ export default function TimerPage() {
             </svg>
 
             <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-6xl font-black font-mono tracking-tighter tabular-nums drop-shadow">
+              <span className="text-6xl font-black font-mono tracking-tighter tabular-nums drop-shadow text-slate-900 dark:text-white">
                 {formatTime(secondsRemaining)}
               </span>
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2 flex items-center gap-1.5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-2 flex items-center gap-1.5">
                 {isActive ? (
                   <>
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
@@ -227,7 +233,7 @@ export default function TimerPage() {
           <div className="flex items-center gap-6">
             <button
               onClick={resetTimer}
-              className="p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/15 text-slate-300 hover:text-white transition-all cursor-pointer shadow-md hover:scale-105"
+              className="p-4 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/15 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer shadow-md hover:scale-105"
               title="Reset timer"
             >
               <RotateCcw className="w-6 h-6" />
@@ -237,8 +243,8 @@ export default function TimerPage() {
               onClick={toggleTimer}
               className={`p-6 rounded-full shadow-lg hover:scale-105 transition-all cursor-pointer ${
                 isActive 
-                  ? 'bg-amber-600 hover:bg-amber-700 text-white' 
-                  : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                  ? 'bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700 text-white' 
+                  : 'bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white'
               }`}
             >
               {isActive ? <Pause className="w-8 h-8 fill-white" /> : <Play className="w-8 h-8 fill-white" />}
@@ -246,7 +252,7 @@ export default function TimerPage() {
 
             <button
               onClick={handleTimerComplete}
-              className="p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/15 text-slate-300 hover:text-white transition-all cursor-pointer shadow-md hover:scale-105"
+              className="p-4 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/15 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer shadow-md hover:scale-105"
               title="Complete session early"
             >
               <CheckCircle className="w-6 h-6" />
@@ -254,7 +260,7 @@ export default function TimerPage() {
           </div>
 
           <div className="max-w-md w-full text-center px-6 min-h-[70px] flex flex-col justify-center">
-            <p className="text-sm italic text-slate-300 leading-relaxed flex items-center justify-center gap-1.5">
+            <p className="text-sm italic text-slate-600 dark:text-slate-300 leading-relaxed flex items-center justify-center gap-1.5">
               <Quote className="w-4 h-4 text-emerald-500 shrink-0 inline transform -scale-y-100" />
               "{quotes[currentQuoteIdx].text}"
             </p>
@@ -264,21 +270,21 @@ export default function TimerPage() {
       </div>
 
       {showLogModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-md p-6 sm:p-8 shadow-2xl relative overflow-hidden flex flex-col gap-6 animate-in fade-in zoom-in duration-300">
+        <div className="fixed inset-0 z-50 bg-slate-900/50 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 sm:p-8 shadow-2xl relative overflow-hidden flex flex-col gap-6 animate-in fade-in zoom-in duration-300">
             <div className="flex items-center gap-3">
-              <div className="bg-emerald-950 p-3 rounded-2xl border border-emerald-800">
-                <Award className="w-6 h-6 text-emerald-400" />
+              <div className="bg-emerald-50 dark:bg-emerald-950 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-800">
+                <Award className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div>
-                <h3 className="text-xl font-bold tracking-tight">Log Deep Work</h3>
-                <p className="text-xs text-slate-400">Save this completed session as a journal entry.</p>
+                <h3 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Log Deep Work</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Save this completed session as a journal entry.</p>
               </div>
             </div>
 
             <form onSubmit={handleLogSubmit} className="flex flex-col gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
                   Topic / Subject Name
                 </label>
                 <input
@@ -287,18 +293,18 @@ export default function TimerPage() {
                   onChange={(e) => setLogTitle(e.target.value)}
                   required
                   placeholder="e.g. Organic Chemistry Review"
-                  className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-white transition-all"
+                  className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-slate-900 dark:text-white transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
                   Difficulty Level
                 </label>
                 <select
                   value={logDifficulty}
                   onChange={(e) => setLogDifficulty(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-white transition-all cursor-pointer"
+                  className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-slate-900 dark:text-white transition-all cursor-pointer"
                 >
                   <option value="Easy">Easy</option>
                   <option value="Medium">Medium</option>
@@ -307,7 +313,7 @@ export default function TimerPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
                   Learning Notes / Accomplishments
                 </label>
                 <textarea
@@ -316,15 +322,15 @@ export default function TimerPage() {
                   required
                   rows="4"
                   placeholder="What concepts did you review? List key takeaways or formulas here..."
-                  className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-white transition-all resize-none leading-relaxed"
+                  className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-slate-900 dark:text-white transition-all resize-none leading-relaxed"
                 ></textarea>
               </div>
 
-              <div className="flex gap-3 justify-end border-t border-slate-800 pt-4 mt-2">
+              <div className="flex gap-3 justify-end border-t border-slate-100 dark:border-slate-800 pt-4 mt-2">
                 <button
                   type="button"
                   onClick={() => setShowLogModal(false)}
-                  className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                 >
                   Discard
                 </button>

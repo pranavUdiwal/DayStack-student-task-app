@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile, updateProfile, uploadPhoto } from '../profileSlice';
 import Navbar from '../../../components/Navbar';
 import Loader from '../../../components/Loader';
-import { User, Mail, Camera, FileText, CheckCircle2 } from 'lucide-react';
+import { User, Mail, Camera, FileText, CheckCircle2, Trash2 } from 'lucide-react';
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
@@ -40,6 +40,10 @@ export default function ProfilePage() {
       formData.append('photo', file);
       dispatch(uploadPhoto(formData));
     }
+  };
+
+  const handleDeletePhoto = () => {
+    dispatch(updateProfile({ profilePhoto: "" }));
   };
 
   if (loading && !profile) {
@@ -87,6 +91,15 @@ export default function ProfilePage() {
                 />
               </label>
             </div>
+            {profile?.profilePhoto && (
+              <button
+                onClick={handleDeletePhoto}
+                className="text-xs text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 flex items-center gap-1 mt-[-10px] transition-colors font-medium"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                Remove Photo
+              </button>
+            )}
 
             <div className="flex flex-col gap-1">
               <h3 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight">
