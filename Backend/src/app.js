@@ -20,6 +20,10 @@ app.use(cookieParser());
 const passport = require('./config/passport');
 app.use(passport.initialize());
 
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
 app.use('/api/auth', userRouter);
 app.use('/api/journals', journalRouter);
 app.use('/api/dashboard', dashboardRouter);
